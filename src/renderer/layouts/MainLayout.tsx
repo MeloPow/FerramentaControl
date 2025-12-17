@@ -17,8 +17,15 @@ import {
     styled,
     Theme,
     Typography,
+    Chip,            // ✅ ADD
+    Stack,           // ✅ ADD
+    Dialog,          // ✅ ADD
+    DialogTitle,     // ✅ ADD
+    DialogContent,   // ✅ ADD
+    DialogActions,   // ✅ ADD
+    Button,          // ✅ ADD
 } from '@mui/material';
-
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'; // ✅ ADD
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
@@ -28,7 +35,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 import logoPrincipal from '../../assets/images/logos/logoPrincipalCLEAN.png';
 import logoAV from '../../assets/images/logos/logoAV.jpg';
-import { text } from 'stream/consumers';
 
 const drawerWidth = 310;
 
@@ -41,6 +47,21 @@ const COLORS = {
     textMuted: '#9CA3AF',
     textPrimary: '#F3F4F6',
 };
+
+// ✅ ADD (perto das tuas consts)
+type BuildChannel = 'dev' | 'beta' | 'stable';
+
+const BUILD = {
+    version: '0.1.0',      // depois a gente amarra isso num env/package.json
+    channel: 'dev' as BuildChannel,
+    platform: 'Desktop (Electron)',
+} as const;
+
+const CLIENT = {
+    name: 'Atividade Vertical',
+    tagline: 'Soluções nas Alturas',
+} as const;
+
 
 const APP = {
     tagline: 'Gestão inteligente de ferramentas',
@@ -93,10 +114,21 @@ const CustomListItemIcon = styled(ListItemIcon)(() => ({
     color: 'inherit',
 }));
 
+const ROUTE_TITLES: Record<string, string> = {
+    '/painel': 'Painel',
+    '/ferramentas': 'Ferramentas',
+    '/movimentacoes': 'Movimentações',
+    '/obras': 'Obras',
+    '/colaboradores': 'Colaboradores',
+};
+
 export default function MainLayout() {
     const navigate = useNavigate();
     const location = useLocation();
+    const currentTitle =
+        ROUTE_TITLES[location.pathname] ?? 'FerramentasControl';
     const [open, setOpen] = useState(false);
+    const [aboutOpen, setAboutOpen] = useState(false);
 
     const handleNavigate = (path: string) => {
         navigate(path);
@@ -109,107 +141,227 @@ export default function MainLayout() {
 
             <CustomAppBar position="fixed" open={open}>
                 <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <IconButton onClick={() => setOpen(!open)} sx={{ color: COLORS.text }}>
-                        <MenuIcon fontSize="large" />
-                    </IconButton>
-
-                    {/* Bloco institucional */}
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 1.5,
-                        }}
-                    >
-                        <Box sx={{ textAlign: 'right' }}>
-                            <Typography
-                                variant="caption"
-                                sx={{
-                                    color: COLORS.textMuted,
-                                    letterSpacing: 0.8,
-                                    textTransform: 'uppercase',
-                                    lineHeight: 1,
-                                }}
-                            >
-                                Desenvolvido para
-                            </Typography>
-
-                            <Typography
-                                variant="subtitle2"
-                                sx={{
-                                    fontWeight: 700,
-                                    color: COLORS.textPrimary,
-                                    letterSpacing: 0.5,
-                                    lineHeight: 1.1,
-                                }}
-                            >
-                                Atividade Vertical
-                            </Typography>
-                        </Box>
-
-                        <Avatar
-                            src={logoAV}
-                            alt="Atividade Vertical"
-                            variant="square"
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <IconButton onClick={() => setOpen(!open)} sx={{ color: COLORS.text }}>
+                            <MenuIcon fontSize="large" />
+                        </IconButton>
+                        <Divider orientation="vertical" flexItem sx={{ opacity: 0.2 }} />
+                        <Typography
+                            variant="h6"
                             sx={{
-                                width: 140,
-                                height: 130,
-                                borderRadius: 4,
-                                filter: 'grayscale(100%)',
-                                opacity: 0.9,
+                                fontWeight: 800,
+                                letterSpacing: 0.4,
+                                color: COLORS.textPrimary,
+                                textTransform: 'capitalize',
                             }}
-                        />
+                        >
+                            {currentTitle}
+                        </Typography>
                     </Box>
+
+                    {/* ✅ ADD: Badges + Sobre + Bloco institucional */}
+                    <Stack direction="row" alignItems="center" spacing={2}>
+                        <Stack direction="row" spacing={1} alignItems="center">
+                            <Chip
+                                size="small"
+                                label={`v${BUILD.version}`}
+                                sx={{
+                                    bgcolor: COLORS.surfaceLight,
+                                    color: COLORS.textPrimary,
+                                    fontWeight: 700,
+                                    letterSpacing: 0.3,
+                                }}
+                            />
+                            <Chip
+                                size="small"
+                                label={BUILD.platform}
+                                sx={{
+                                    bgcolor: 'transparent',
+                                    color: COLORS.textMuted,
+                                    border: `1px solid ${COLORS.surfaceLight}`,
+                                }}
+                                variant="outlined"
+                            />
+                        </Stack>
+
+                        <Tooltip title="Sobre / Créditos">
+                            <IconButton
+                                onClick={() => setAboutOpen(true)}
+                                sx={{
+                                    color: COLORS.text,
+                                    border: `1px solid ${COLORS.surfaceLight}`,
+                                    borderRadius: 2,
+                                }}
+                            >
+                                <InfoOutlinedIcon />
+                            </IconButton>
+                        </Tooltip>
+
+                        {/* Bloco institucional (o teu) */}
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                            <Box sx={{ textAlign: 'right' }}>
+                                <Typography
+                                    variant="caption"
+                                    sx={{
+                                        color: COLORS.textMuted,
+                                        letterSpacing: 0.8,
+                                        textTransform: 'uppercase',
+                                        lineHeight: 1,
+                                    }}
+                                >
+                                    Desenvolvido para
+                                </Typography>
+
+                                <Typography
+                                    variant="subtitle2"
+                                    sx={{
+                                        fontWeight: 700,
+                                        color: COLORS.textPrimary,
+                                        letterSpacing: 0.5,
+                                        lineHeight: 1.1,
+                                    }}
+                                >
+                                    {CLIENT.name}
+                                </Typography>
+                            </Box>
+
+                            <Avatar
+                                src={logoAV}
+                                alt="Atividade Vertical"
+                                variant="square"
+                                sx={{
+                                    width: 110,
+                                    height: 110,
+                                    borderRadius: 4,
+                                    bgcolor: 'transparent',
+                                    filter: 'grayscale(100%)',
+                                    opacity: 0.85,
+                                    '& img': { objectFit: 'contain', width: 170 }, // ✅ AQUI é o tiro certo
+                                }}
+                            />
+                        </Box>
+                    </Stack>
                 </Toolbar>
             </CustomAppBar>
 
+
             <CustomDrawer variant="persistent" anchor="left" open={open}>
                 <Toolbar />
-                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', pb: 2 }}>
+                <Box
+                    sx={{
+                        position: 'relative',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        px: 2,
+                        pt: 2.5,
+                        pb: 2,
+                        gap: 1,
+                        borderBottomLeftRadius: 20,
+                        borderBottomRightRadius: 20,
+
+                        // “card” sutil: dá estrutura sem virar uma caixa dura
+                        borderBottom: `1px solid rgba(255,255,255,0.08)`,
+                        boxShadow: '0 10px 30px rgba(0,0,0,0.25)',
+
+                        // fundo premium: halo + fade (bem discreto)
+                        background: `
+                             radial-gradient(80% 60% at 50% 0%,
+                              rgba(245,158,11,0.12) 0%,
+                              rgba(255,255,255,0.04) 40%,
+                              transparent 75%),
+                                linear-gradient(180deg, rgba(255,255,255,0.03), transparent)
+                        `,
+                    }}
+                >
                     <Tooltip title="FerramentasControl">
                         <Avatar
                             src={logoPrincipal}
                             alt="FerramentasControl"
                             sx={{
-                                width: 260,
-                                height: 280,
-                                mb: 1.5,
+                                width: 230,          // 👈 menos dominante que 260
+                                height: 240,         // 👈 mantém presença sem esmagar tudo
+                                mb: 0.5,
+                                borderRadius: 4,
+
+                                // dá um “punch” de produto sem gritar
+                                boxShadow: '0 12px 24px rgba(0,0,0,0.25)',
+                                border: '1px solid rgba(255,255,255,0.06)',
                             }}
                         />
                     </Tooltip>
 
-                    {/* Linha principal */}
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 1,
+                            mb: 0.5,
+                            px: 1.5,
+                            py: 0.4,
+                            borderRadius: 20,
+                            backgroundColor: 'rgba(255,255,255,0.04)',
+                            border: '1px solid rgba(255,255,255,0.08)',
+                        }}
+                    >
+                        <Typography
+                            variant="caption"
+                            sx={{
+                                fontWeight: 700,
+                                letterSpacing: 0.6,
+                                color: COLORS.textPrimary,
+                            }}
+                        >
+                            FerramentasControl
+                        </Typography>
+
+                        <Divider orientation="vertical" flexItem sx={{ opacity: 0.3 }} />
+
+                        <Typography
+                            variant="caption"
+                            sx={{
+                                fontWeight: 600,
+                                color: COLORS.textMuted,
+                                letterSpacing: 0.5,
+                            }}
+                        >
+                            v{BUILD.version}
+                        </Typography>
+                    </Box>
+
+
                     <Typography
                         variant="subtitle1"
                         sx={{
                             textAlign: 'center',
-                            px: 2,
-                            fontWeight: 700,
-                            letterSpacing: 0.6,
+                            px: 1,
+                            fontWeight: 800,      // 👈 premium (sólido)
+                            letterSpacing: 0.3,   // 👈 menos espaçado = mais sofisticado
                             color: COLORS.textPrimary,
-                            lineHeight: 1.2,
+                            lineHeight: 1.15,
+                            textShadow: '0 2px 10px rgba(0,0,0,0.35)',
                         }}
                     >
                         {APP.tagline}
                     </Typography>
 
-                    {/* Linha secundária */}
                     <Typography
                         variant="caption"
                         sx={{
                             textAlign: 'center',
-                            px: 2,
-                            mt: 0.3,
-                            fontWeight: 500,
-                            letterSpacing: 1,
+                            px: 1,
+                            mt: 0.2,
+                            fontWeight: 600,
+                            letterSpacing: 0.8,
                             color: COLORS.textMuted,
                             textTransform: 'uppercase',
+                            opacity: 0.9,
                         }}
                     >
                         {APP.subline}
                     </Typography>
 
-                    <Divider sx={{ width: '80%', mt: 1.5 }} />
+                    <Divider sx={{ width: '86%', mt: 1.2, opacity: 0.25 }} />
                 </Box>
 
 
@@ -240,7 +392,75 @@ export default function MainLayout() {
                     </CustomListItem>
                 </List>
             </CustomDrawer>
+            {/* ✅ ADD: Modal Sobre / Créditos */}
+            <Dialog
+                open={aboutOpen}
+                onClose={() => setAboutOpen(false)}
+                maxWidth="sm"
+                fullWidth
+            >
+                <DialogTitle sx={{ fontWeight: 800 }}>
+                    Sobre o FerramentasControl
+                </DialogTitle>
 
+                <DialogContent dividers>
+                    <Stack spacing={2}>
+                        <Stack direction="row" spacing={2} alignItems="center">
+                            <Avatar
+                                src={logoPrincipal}
+                                alt="FerramentasControl"
+                                sx={{ width: 64, height: 64 }}
+                            />
+                            <Box>
+                                <Typography sx={{ fontWeight: 800, color: COLORS.textPrimary }}>
+                                    FerramentasControl
+                                </Typography>
+                                <Typography variant="body2" sx={{ color: COLORS.textMuted }}>
+                                    {APP.tagline} • {APP.subline}
+                                </Typography>
+                            </Box>
+                        </Stack>
+
+                        <Divider />
+
+                        <Stack direction="row" spacing={2} alignItems="center">
+                            <Avatar
+                                src={logoAV}
+                                alt={CLIENT.name}
+                                variant="square"
+                                sx={{
+                                    width: 96,
+                                    height: 48,
+                                    borderRadius: 1.5,
+                                    filter: 'grayscale(100%)',
+                                    opacity: 0.9,
+                                }}
+                            />
+                            <Box>
+                                <Typography sx={{ fontWeight: 800 }}>
+                                    {CLIENT.name}
+                                </Typography>
+                                <Typography variant="body2" sx={{ color: COLORS.textMuted }}>
+                                    {CLIENT.tagline}
+                                </Typography>
+                            </Box>
+                        </Stack>
+
+                        <Divider />
+
+                        <Typography variant="body2" sx={{ color: COLORS.textMuted }}>
+                            Build: <b>v{BUILD.version}</b> • Canal: <b>{BUILD.channel}</b> • Plataforma: <b>{BUILD.platform}</b>
+                        </Typography>
+                    </Stack>
+                </DialogContent>
+
+                <DialogActions>
+                    <Button onClick={() => setAboutOpen(false)} variant="contained" sx={{ bgcolor: COLORS.primary, color: COLORS.background, fontWeight: 800 }}>
+                        Fechar
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            {/* ✅ ADD: Diálogo Sobre / Créditos */}
             <Box
                 component="main"
                 sx={{
