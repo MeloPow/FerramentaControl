@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+
+    "jsx": "react-jsx",
+
+    "allowJs": true,
+    "checkJs": false,
+
+    "strict": true,
+    "noImplicitAny": true,
+
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+
+    "baseUrl": "./src",
+    "outDir": "dist",
+
+    "typeRoots": ["./src/shared/types", "./node_modules/@types"],
+
+    "paths": {
+      "@assets/*": ["assets/*"],
+      "@features/*": ["features/*"],
+      "@shared/*": ["shared/*"],
+      "@main/*": ["main/*"],
+      "@renderer/*": ["renderer/*"]
+    }
+  },
+  "include": ["src/**/*"]
+}

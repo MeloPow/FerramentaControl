@@ -1,0 +1,94 @@
+/* src/pages/Agenda.css */
+.consulta-background {
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.consulta-container {
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  border-top: 12px;
+}
+
+.consulta-button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 16px;
+  width: 800px;
+  margin-bottom: 20px;
+  max-width: 800px;
+  height: 100px;
+  max-height: 100px;
+  border: none;
+  border-radius: 30px;
+  background: #481d74; /* rosa para roxo */
+  color: white;
+  font-size: 1.4rem;
+  font-style: italic;
+  font-weight: initial;
+  font-family: 'Montserrat';
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.consulta-button:hover {
+  transform: scale(1.05);
+}
+
+.consulta-button::after {
+  content: '→';
+  position: absolute;
+  right: 20px;
+  font-size: 1.5rem;
+  background-color: transparent;
+  border: 2px solid white;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.buttonAntProx {
+  background-color: #38c6e5;
+  color: beige;
+  padding: 14px;
+  font-size: 1.1rem;
+  border-radius: 6px;
+  text-transform: none;
+  font-weight: bold;
+}
+
+.buttonAntProx:hover {
+  background-color: '#2bb2d0';
+}
+
+.option-button {
+  display: block;
+  background-color: #5c6bc0;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 24px;
+  font-size: 1.3rem;
+  font-weight: 500;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 6px auto;
+  width: 90%;
+  max-width: 500px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.option-button:hover {
+  background-color: #3949ab;
+  transform: scale(1.02);
+}
