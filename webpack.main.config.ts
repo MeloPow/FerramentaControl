@@ -1,3 +1,4 @@
+// webpack.plugins.ts
 import type { Configuration } from 'webpack';
 
 import { rules } from './webpack.rules';
