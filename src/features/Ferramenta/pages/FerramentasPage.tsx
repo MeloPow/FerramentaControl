@@ -1,5 +1,13 @@
 import React from 'react';
+import background from '../../../assets/images/backgrounds/principal.png';
 
 export default function FerramentaPage() {
-   return <div style={{ padding: 16 }}>Ferramentas (em construção)</div>;
+
+   return (
+      <div className="background" style={{ backgroundImage: `url(${background})` }}>
+         <div className="container">
+            <h1 className="title">Página inicial das ferramentas</h1>
+         </div>
+      </div>
+   );
 }

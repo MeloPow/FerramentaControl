@@ -33,7 +33,7 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
 import BadgeIcon from '@mui/icons-material/Badge';
 import MenuIcon from '@mui/icons-material/Menu';
 
-import logoPrincipal from '../../assets/images/logos/logoPrincipalCLEAN.png';
+import logoPrincipal from '../../assets/images/logos/logoPrincipal.png';
 import logoAV from '../../assets/images/logos/logoAV.jpg';
 
 const drawerWidth = 310;
